@@ -96,6 +96,7 @@ function save(doc) {
 }
 
 function saveAll(docs) {
+  docs.map(validate);
   docs.map(save);
 }
 
@@ -106,4 +107,5 @@ module.exports = {
 /*
 TODOs
 - check whether url is already exist
+- if new.yml or .new.yml not exist, create them.
 */
