@@ -23,7 +23,7 @@ function main() {
 
 function exit(msg) {
   if (msg) {
-    console.error(msg);
+    console.error(String(msg));
   }
 
   process.exit(1);

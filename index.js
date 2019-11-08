@@ -20,21 +20,31 @@ function validateUrl(url) {
   return isWebUri(url);
 }
 
+function stringify(doc, key) {
+  let str = '\n' + JSON.stringify(doc, null, 4);
+  if (key) {
+    const regex = new RegExp(`  ([ ]+"${key}")`);
+    str = str.replace(regex, '>>$1');
+  }
+
+  return str;
+}
+
 function validate(doc) {
   if (!doc.url) {
-    throw new TypeError('url is required.');
+    throw new TypeError('url is required.' + stringify(doc, 'url'));
   }
 
   if (!validateUrl(doc.url)) {
-    throw new TypeError('invalid url.');
+    throw new TypeError('invalid url.' + stringify(doc, 'url'));
   }
 
   if (doc.rss && !validateUrl(doc.rss)) {
-    throw new TypeError('invalid rss url.');
+    throw new TypeError('invalid rss url.' + stringify(doc, 'rss'));
   }
 
   if (doc.github && !validateUrl(doc.github)) {
-    throw new TypeError('invalid github url.');
+    throw new TypeError('invalid github url.' + stringify(doc, 'github'));
   }
 
   if (doc.langs) {
@@ -44,7 +54,7 @@ function validate(doc) {
 
     doc.langs = doc.langs.map(lang => {
       if (!ISO6391.validate(lang) && !LocaleCode.validate(lang)) {
-        throw new TypeError('invalid language code: ' + lang);
+        throw new TypeError('invalid language code: ' + lang + stringify(doc, 'langs'));
       }
 
       return lang.slice(0, 2).toLowerCase();
@@ -75,11 +85,10 @@ function dump(doc) {
   return result.join('\n') + '\n';
 }
 
-function save(doc) {
-  validate(doc);
-
+function _save(doc) {
   const id = gen();
   const filename = id.slice(0, filenameLength) + '.yml';
+  console.info('\n---');
   console.info('id: ' + id);
   console.info('filename: ' + filename);
   doc._id = id;
@@ -95,9 +104,14 @@ function save(doc) {
   fs.appendFileSync(filepath, dump(doc));
 }
 
+function save(doc) {
+  validate(doc);
+  _save(doc);
+}
+
 function saveAll(docs) {
   docs.map(validate);
-  docs.map(save);
+  docs.map(_save);
 }
 
 module.exports = {
