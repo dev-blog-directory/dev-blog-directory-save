@@ -1,10 +1,11 @@
 'use strict';
 
 const {expect} = require('chai');
-const lib = require('.');
+const {save, saveAll} = require('dev-blog-directory-save');
 
 describe('something', () => {
   it('should do something', () => {
-    expect(lib).to.be.a('object');
+    expect(save).to.be.a('function');
+    expect(saveAll).to.be.a('function');
   });
 });

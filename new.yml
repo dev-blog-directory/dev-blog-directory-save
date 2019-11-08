@@ -1,0 +1,18 @@
+# blog name
+name:
+# blog url (required)
+# url: https://myblog.com/
+url: https://myblog.com/
+# description of this blog.
+desc:
+# blog feed url. rss or atom.
+rss:
+# author of this blog
+author:
+# the languages used by this blog. default is en.
+# e.g.
+# langs: fr
+# langs: [zh, en]
+langs:
+# github url of the author
+github:

@@ -1,27 +1,39 @@
 {
-  "name": "new-repository-scaffold",
+  "name": "dev-blog-directory-save",
   "version": "1.0.0",
-  "description": "A scaffold for create a new repository.",
+  "description": "A CLI and API for save new blogs to dev-blog-directory.",
   "main": "index.js",
+  "bin": {
+    "js-yaml": "bin/save-blog.js"
+  },
   "scripts": {
     "lint": "xo",
     "lint:fix": "xo --fix",
-    "test": "mocha test/index.js",
+    "test": "mocha test.js",
     "test:cov": "nyc npm run test",
     "test:loop": "while npm test --silent; do :; done"
   },
-  "dependencies": {},
+  "dependencies": {
+    "id-generators": "^1.0.0",
+    "iso-639-1": "^2.1.0",
+    "locale-code": "^2.0.2",
+    "node-read-yaml": "0.0.1",
+    "valid-url": "^1.0.9"
+  },
   "devDependencies": {
     "chai": "^4.2.0",
+    "dev-blog-directory-save": "file:.",
     "mocha": "^6.2.1",
     "nyc": "^14.1.1",
     "xo": "^0.25.3"
   },
   "keywords": [
-    "foo",
-    "bar"
+    "save",
+    "blog",
+    "cli"
   ],
   "files": [
+    "bin/",
     "index.js",
     "LICENSE",
     "README.md"
@@ -33,12 +45,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dailyrandomphoto/new-repository-scaffold.git"
+    "url": "git+https://github.com/dailyrandomphoto/dev-blog-directory-save.git"
   },
   "bugs": {
-    "url": "https://github.com/dailyrandomphoto/new-repository-scaffold/issues"
+    "url": "https://github.com/dailyrandomphoto/dev-blog-directory-save/issues"
   },
-  "homepage": "https://github.com/dailyrandomphoto/new-repository-scaffold#readme",
+  "homepage": "https://github.com/dailyrandomphoto/dev-blog-directory-save#readme",
   "xo": {
     "space": 2,
     "overrides": [
