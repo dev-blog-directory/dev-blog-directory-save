@@ -4,15 +4,16 @@
 
 const fs = require('fs');
 const read = require('node-read-yaml').sync;
-const {save} = require('dev-blog-directory-save');
+const {saveAll} = require('dev-blog-directory-save');
 const newFilename = 'new.yml';
 const templateFilename = '.new.yml';
 
 function main() {
   try {
-    const doc = read(newFilename);
+    const docs = read(newFilename, {multi: true})
+      .filter(doc => doc && typeof doc === 'object');
 
-    save(doc);
+    saveAll(docs);
 
     fs.copyFileSync(templateFilename, newFilename);
   } catch (error) {

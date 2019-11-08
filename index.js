@@ -10,7 +10,7 @@ const generator = get('nanoid-simple');
 const gen = generator({size: 10});
 const keys = ['name', 'url', 'desc', 'rss', 'author', 'langs', 'github'];
 const baseDir = 'documents';
-const filenameLength = 1;
+const filenameLength = 2;
 
 function validateUrl(url) {
   if (typeof url !== 'string') {
