@@ -8,7 +8,7 @@ const ISO6391 = require('iso-639-1');
 const {get} = require('id-generators');
 const generator = get('nanoid-simple');
 const gen = generator({size: 10});
-const keys = ['name', 'url', 'desc', 'rss', 'author', 'langs', 'github'];
+const keys = ['name', 'url', 'desc', 'rss', 'author', 'langs', 'github', 'tags'];
 const baseDir = 'documents';
 const filenameLength = 2;
 
@@ -18,6 +18,10 @@ function validateUrl(url) {
   }
 
   return isWebUri(url);
+}
+
+function validateTag(tag) {
+  return /^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(tag);
 }
 
 function stringify(doc, key) {
@@ -49,7 +53,7 @@ function validate(doc) {
 
   if (doc.langs) {
     if (typeof doc.langs === 'string') {
-      doc.langs = [doc.langs];
+      doc.langs = doc.langs.split(/[, ]+/);
     }
 
     doc.langs = doc.langs.map(lang => {
@@ -58,6 +62,23 @@ function validate(doc) {
       }
 
       return lang.slice(0, 2).toLowerCase();
+    });
+  }
+
+  if (doc.tags) {
+    if (typeof doc.tags === 'string') {
+      doc.tags = doc.tags.split(/[, ]+/);
+    }
+
+    doc.tags = doc.tags.filter(tag => tag && typeof tag === 'string');
+    doc.tags = doc.tags.map(tag => {
+      const orgTag = tag;
+      tag = tag.trim().toLowerCase();
+      if (!validateTag(tag)) {
+        throw new TypeError('invalid tag: ' + orgTag + '\nonly alphabet, number, - are allowed. - can\'t appear at the start and end.' + stringify(doc, 'tags'));
+      }
+
+      return tag;
     });
   }
 
@@ -72,9 +93,9 @@ function dump(doc) {
     const key = keys[i];
     const value = doc[key];
     if (Array.isArray(value)) {
-      result.push(`  ${key}: [${value}]`);
+      result.push(`  ${key}: ${JSON.stringify(value)}`);
     } else if (value) {
-      result.push(`  ${key}: ${value}`);
+      result.push(`  ${key}: ${JSON.stringify(value)}`);
     } else {
       result.push(`  ${key}:`);
     }
@@ -118,8 +139,10 @@ module.exports = {
   save,
   saveAll
 };
-/*
+
+/**
 TODOs
 - check whether url is already exist
 - if new.yml or .new.yml not exist, create them.
+- request url, check whether url is available, get missed informations
 */

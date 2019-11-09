@@ -16,4 +16,23 @@ author:
 langs:
 # github url of the author
 github:
+# add tags for this blog.
+# only alphabet, number, - are allowed. - can't appear at the start and end.
+# e.g.
+# tags:
+#   - personal-blog
+#   - company-blog
+#   - product-blog
+#   - javascript
+#   - python
+#   - architecture
+#   - tutorial
+#
+# these styles are supported also.
+# tags: [foo, bar]
+# tags: foo, bar
+# tags: foo bar
+tags:
+  - personal-blog
+  - JavaScript
 ---
