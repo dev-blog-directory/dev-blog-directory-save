@@ -7,7 +7,7 @@
 [![dependencies Status][dependencies-image]][dependencies-url]
 [![devDependencies Status][devDependencies-image]][devDependencies-url]
 
-A CLI and API for save new blogs to **dev-blog-directory**.
+API for save new blogs to **[dev-blog-directory-raw](https://github.com/dailyrandomphoto/dev-blog-directory-raw)**.
 
 ## Installation
 
@@ -15,20 +15,13 @@ A CLI and API for save new blogs to **dev-blog-directory**.
 npm install dev-blog-directory-save
 ```
 
-## Usages
-1. open and edit `new.yml` file.
-2. execute `npx save-blog`
-```sh
-$ npx save-blog
-```
-
 ## API
 
-### save (docJson)
+### save (doc)
 
 Save a blog entry to documents.
 
-### saveAll  (docJsonArray)
+### saveAll  (docArray)
 
 Save a list of blog entries to documents.
 
@@ -36,10 +29,14 @@ Save a list of blog entries to documents.
 ## Related
 
 - [dev-blog-directory](https://github.com/dailyrandomphoto/dev-blog-directory) - A directory of the developer's blog.
+- [dev-blog-directory-raw](https://github.com/dailyrandomphoto/dev-blog-directory-raw) - Raw data storage of [Developer Blog Directory](https://github.com/dailyrandomphoto/dev-blog-directory).
+- [dev-blog-directory-save-yaml-cli](https://github.com/dailyrandomphoto/dev-blog-directory-save-yaml-cli) - A CLI for saves the YAML format blog list to `documents/*.yml`.
+- [dev-blog-directory-save-json-cli](https://github.com/dailyrandomphoto/dev-blog-directory-save-json-cli) - A CLI for saves the JSON format blog list to `documents/*.yml`.
 
 ## License
-Copyright (c) 2019 dailyrandomphoto. Licensed under the [MIT license][license-url].
+Copyright (c) 2019 [dailyrandomphoto][my-url]. Licensed under the [MIT license][license-url].
 
+[my-url]: https://github.com/dailyrandomphoto
 [npm-url]: https://www.npmjs.com/package/dev-blog-directory-save
 [travis-url]: https://travis-ci.org/dailyrandomphoto/dev-blog-directory-save
 [coveralls-url]: https://coveralls.io/github/dailyrandomphoto/dev-blog-directory-save?branch=master
