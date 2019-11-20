@@ -1,6 +1,6 @@
 {
   "name": "dev-blog-directory-save",
-  "version": "0.0.8",
+  "version": "0.1.1",
   "description": "API for save new blogs to dev-blog-directory.",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,7 @@
     "test:loop": "while npm test --silent; do :; done"
   },
   "dependencies": {
+    "fs-extra": "^8.1.0",
     "id-generators": "^1.0.3",
     "iso-639-1": "^2.1.0",
     "locale-code": "^2.0.2",
@@ -23,6 +24,7 @@
     "dev-blog-directory-save": "file:.",
     "mocha": "^6.2.1",
     "nyc": "^14.1.1",
+    "rewire": "^4.0.1",
     "xo": "^0.25.3"
   },
   "keywords": [
@@ -50,6 +52,9 @@
   "homepage": "https://github.com/dailyrandomphoto/dev-blog-directory-save#readme",
   "xo": {
     "space": 2,
+    "rules": {
+      "promise/prefer-await-to-then": 0
+    },
     "overrides": [
       {
         "files": "test.js",
