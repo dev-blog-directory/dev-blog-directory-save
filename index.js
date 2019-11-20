@@ -10,13 +10,13 @@ const ISO6391 = require('iso-639-1');
 const {get} = require('id-generators');
 const generator = get('nanoid-simple-good');
 const gen = generator({size: 10});
-const keys = ['name', 'url', 'desc', 'rss', 'author', 'langs', 'github', 'tags'];
+const keys = ['name', 'url', 'desc', 'rss', 'author', 'langs', 'github', 'categories', 'tags'];
 const baseDir = 'documents';
 const filenameLength = 2;
 
 function findUrlInDocuments(url) {
   const command = `grep -lP '^\\s*url: *"${url}"\\s*$' ${baseDir}/*`;
-  console.debug(command);
+  // Console.debug(command);
   let result;
   try {
     result = String(execSync(command));
@@ -120,21 +120,38 @@ function validate(doc) {
     });
   }
 
+  if (doc.categories) {
+    if (typeof doc.categories === 'string') {
+      doc.categories = doc.categories.split(/[, ]+/);
+    }
+
+    doc.categories = doc.categories.filter(tag => tag && typeof tag === 'string')
+      .map(tag => {
+        const orgTag = tag;
+        tag = tag.trim().toLowerCase();
+        if (!validateTag(tag)) {
+          throw new TypeError('invalid category: ' + orgTag + '\nonly alphabet, number, - are allowed. - can\'t appear at the start and the end.' + stringify(doc, 'categories'));
+        }
+
+        return tag;
+      });
+  }
+
   if (doc.tags) {
     if (typeof doc.tags === 'string') {
       doc.tags = doc.tags.split(/[, ]+/);
     }
 
-    doc.tags = doc.tags.filter(tag => tag && typeof tag === 'string');
-    doc.tags = doc.tags.map(tag => {
-      const orgTag = tag;
-      tag = tag.trim().toLowerCase();
-      if (!validateTag(tag)) {
-        throw new TypeError('invalid tag: ' + orgTag + '\nonly alphabet, number, - are allowed. - can\'t appear at the start and end.' + stringify(doc, 'tags'));
-      }
+    doc.tags = doc.tags.filter(tag => tag && typeof tag === 'string')
+      .map(tag => {
+        const orgTag = tag;
+        tag = tag.trim().toLowerCase();
+        if (!validateTag(tag)) {
+          throw new TypeError('invalid tag: ' + orgTag + '\nonly alphabet, number, - are allowed. - can\'t appear at the start and the end.' + stringify(doc, 'tags'));
+        }
 
-      return tag;
-    });
+        return tag;
+      });
   }
 
   return true;
@@ -186,6 +203,10 @@ function save(doc) {
 }
 
 function saveAll(docs) {
+  if (!Array.isArray(docs)) {
+    throw new TypeError('Invalid arguments. Expect an array.');
+  }
+
   checkDuplicated(docs);
   docs.map(validate);
   docs.map(_save);
