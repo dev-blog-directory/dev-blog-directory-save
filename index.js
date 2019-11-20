@@ -2,6 +2,8 @@
 
 const fs = require('fs');
 const path = require('path');
+const {URL} = require('url');
+const {execSync} = require('child_process');
 const {isWebUri} = require('valid-url');
 const LocaleCode = require('locale-code');
 const ISO6391 = require('iso-639-1');
@@ -12,12 +14,47 @@ const keys = ['name', 'url', 'desc', 'rss', 'author', 'langs', 'github', 'tags']
 const baseDir = 'documents';
 const filenameLength = 2;
 
+function findUrlInDocuments(url) {
+  const command = `grep -lP '^\\s*url: *"${url}"\\s*$' ${baseDir}/*`;
+  console.debug(command);
+  let result;
+  try {
+    result = String(execSync(command));
+  } catch (_) {
+    // Console.log(error);
+  }
+
+  if (result) {
+    console.info(`Found ${url} in`);
+    console.info(result);
+    // TODO: return duplicated url and index, instead of throwing an error.
+    throw new Error('Duplicated url: ' + url);
+    // // return true;
+  }
+
+  return false;
+}
+
+function checkDuplicated(blogs) {
+  for (let i = blogs.length - 1; i >= 0; i--) {
+    const current = blogs[i];
+    for (let j = 0; j < i; j++) {
+      const compare = blogs[j];
+      if (current.url === compare.url) {
+        // TODO: return duplicated url and index, instead of throwing an error.
+        throw new Error('Duplicated url: ' + current.url);
+      }
+    }
+  }
+}
+
+// eslint-disable-next-line no-unused-vars
 function validateUrl(url) {
   if (typeof url !== 'string') {
     return false;
   }
 
-  return isWebUri(url);
+  return isWebUri(url) === url;
 }
 
 function validateTag(tag) {
@@ -35,20 +72,38 @@ function stringify(doc, key) {
 }
 
 function validate(doc) {
+  if (typeof doc !== 'object') {
+    throw new TypeError('invalid doc object.');
+  }
+
   if (!doc.url) {
     throw new TypeError('url is required.' + stringify(doc, 'url'));
   }
 
-  if (!validateUrl(doc.url)) {
+  try {
+    doc.url = new URL(doc.url).href;
+  } catch (_) {
     throw new TypeError('invalid url.' + stringify(doc, 'url'));
   }
 
-  if (doc.rss && !validateUrl(doc.rss)) {
-    throw new TypeError('invalid rss url.' + stringify(doc, 'rss'));
+  if (findUrlInDocuments(doc.url)) {
+    throw new TypeError('Duplicated url.' + stringify(doc, 'url'));
   }
 
-  if (doc.github && !validateUrl(doc.github)) {
-    throw new TypeError('invalid github url.' + stringify(doc, 'github'));
+  if (doc.rss) {
+    try {
+      doc.rss = new URL(doc.rss).href;
+    } catch (_) {
+      throw new TypeError('invalid rss url.' + stringify(doc, 'rss'));
+    }
+  }
+
+  if (doc.github) {
+    try {
+      doc.github = new URL(doc.github).href;
+    } catch (_) {
+      throw new TypeError('invalid github url.' + stringify(doc, 'github'));
+    }
   }
 
   if (doc.langs) {
@@ -131,6 +186,7 @@ function save(doc) {
 }
 
 function saveAll(docs) {
+  checkDuplicated(docs);
   docs.map(validate);
   docs.map(_save);
 }
