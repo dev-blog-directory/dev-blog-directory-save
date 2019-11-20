@@ -114,6 +114,20 @@ describe('dev-blog-directory-save', () => {
       }];
       expect(() => saveAll(docs)).to.be.throw('Duplicated url');
     });
+
+    it('print multi error messages', () => {
+      const docs = [{
+        url: 'https://myblog.com/saveAll/1',
+        name: 'myblog'
+      }, {
+        url: 'https://myblog.com/saveAll/3',
+        name: 'myblog'
+      }, {
+        url: 'myblog.com/saveAll/4',
+        name: 'myblog'
+      }];
+      expect(() => saveAll(docs)).to.be.throw('Duplicated url');
+    });
   });
 
   describe('validate', () => {

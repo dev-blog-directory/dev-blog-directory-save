@@ -213,8 +213,20 @@ function saveAll(docs) {
   }
 
   checkDuplicated(docs);
-  docs.map(validate);
-  docs.map(_save);
+  const errors = [];
+  docs.forEach(doc => {
+    try {
+      validate(doc);
+    } catch (error) {
+      errors.push(error);
+    }
+  });
+  if (errors.length > 0) {
+    errors.forEach(error => console.log(String(error)));
+    throw errors[0];
+  }
+
+  docs.forEach(_save);
 }
 
 module.exports = {
