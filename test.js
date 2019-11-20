@@ -1,7 +1,7 @@
 'use strict';
 
 const {expect} = require('chai');
-const rmdir = require('rmdir');
+const fs = require('fs-extra');
 const rewire = require('rewire');
 const myModule = rewire('dev-blog-directory-save');
 const {save, saveAll} = require('dev-blog-directory-save');
@@ -10,22 +10,15 @@ const checkDuplicated = myModule.__get__('checkDuplicated');
 const validateUrl = myModule.__get__('validateUrl');
 const validate = myModule.__get__('validate');
 
-describe('something', () => {
-  before(done => {
-    try {
-      rmdir('./documents', (err, dirs, files) => {
-        if (err) {
-          throw err;
-        }
-
-        console.log(dirs);
-        console.log(files);
-        console.log('all files are removed');
-        done();
+describe('dev-blog-directory-save', () => {
+  before(() => {
+    return fs.remove('./documents')
+      .then(() => {
+        console.log('remove ./documents success!');
+      })
+      .catch(error => {
+        console.error(error);
       });
-    } catch (_) {
-      console.log(_);
-    }
   });
 
   it('should return functions', () => {
