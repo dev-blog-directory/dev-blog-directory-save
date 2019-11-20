@@ -376,11 +376,13 @@ describe('dev-blog-directory-save', () => {
       it('should be an array', () => {
         const doc = {
           url: 'https://example.com/',
-          tags: ['FOO', 'Bar']
+          tags: ['FOO', 'Bar'],
+          categories: ['FOO', 'Bar']
         };
         expect(validate(doc)).to.be.eql(true);
         expect(doc.tags).to.be.an('array');
         expect(doc.tags).to.be.eql(['foo', 'bar']);
+        expect(doc.categories).to.be.eql(['FOO', 'Bar']);
       });
 
       const validTags = [

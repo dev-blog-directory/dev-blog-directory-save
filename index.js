@@ -57,6 +57,10 @@ function validateUrl(url) {
   return isWebUri(url) === url;
 }
 
+function validateCategory(tag) {
+  return /^[A-Za-z0-9][A-Za-z0-9-]*[A-Za-z0-9]$/.test(tag);
+}
+
 function validateTag(tag) {
   return /^[a-z0-9][a-z0-9-]*[a-z0-9]$/.test(tag);
 }
@@ -128,8 +132,9 @@ function validate(doc) {
     doc.categories = doc.categories.filter(tag => tag && typeof tag === 'string')
       .map(tag => {
         const orgTag = tag;
-        tag = tag.trim().toLowerCase();
-        if (!validateTag(tag)) {
+        // Categories do not change to lower case
+        tag = tag.trim();
+        if (!validateCategory(tag)) {
           throw new TypeError('invalid category: ' + orgTag + '\nonly alphabet, number, - are allowed. - can\'t appear at the start and the end.' + stringify(doc, 'categories'));
         }
 
