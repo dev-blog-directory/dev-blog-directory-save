@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const {URL} = require('url');
-const {execSync} = require('child_process');
+const readFiles = require('node-read-yaml-files');
 const {isWebUri} = require('valid-url');
 const LocaleCode = require('locale-code');
 const ISO6391 = require('iso-639-1');
@@ -13,23 +13,26 @@ const gen = generator({size: 10});
 const keys = ['name', 'url', 'desc', 'rss', 'author', 'langs', 'github', 'categories', 'tags'];
 const baseDir = 'documents';
 const filenameLength = 2;
+const BLOG_MAP = {};
 
-function findUrlInDocuments(url) {
-  const command = `grep -lP '^\\s*url: *"${url}"\\s*$' ${baseDir}/*`;
-  // Console.debug(command);
-  let result;
-  try {
-    result = String(execSync(command));
-  } catch (_) {
-    // Console.log(error);
+function loadBlogs() {
+  if (!fs.existsSync(baseDir)) {
+    return Promise.resolve({});
   }
 
-  if (result) {
-    console.info(`Found ${url} in`);
-    console.info(result);
-    // TODO: return duplicated url and index, instead of throwing an error.
-    throw new Error('Duplicated url: ' + url);
-    // // return true;
+  return Promise.resolve()
+    .then(() => readFiles(baseDir, {flatten: true}))
+    .then(blogs => blogs.filter(blog => blog && typeof blog.url === 'string'))
+    .then(blogs => {
+      blogs.forEach(blog => {
+        BLOG_MAP[blog.url] = blog;
+      });
+    });
+}
+
+function findUrlInDocuments(url) {
+  if (BLOG_MAP[url]) {
+    return true;
   }
 
   return false;
@@ -205,34 +208,42 @@ function _save(doc) {
 }
 
 function save(doc) {
-  validate(doc);
-  _save(doc);
+  return loadBlogs()
+    .then(() => {
+      validate(doc);
+      _save(doc);
+    });
 }
 
 function saveAll(docs) {
-  if (!Array.isArray(docs)) {
-    throw new TypeError('Invalid arguments. Expect an array.');
-  }
+  return Promise.resolve()
+    .then(() => {
+      if (!Array.isArray(docs)) {
+        throw new TypeError('Invalid arguments. Expect an array.');
+      }
 
-  const duplicated = checkDuplicated(docs);
-  if (duplicated && duplicated.length > 1) {
-    throw new Error('Duplicated urls in the input array: \n  ' + duplicated.join('\n  '));
-  }
+      const duplicated = checkDuplicated(docs);
+      if (duplicated && duplicated.length > 1) {
+        throw new Error('Duplicated urls in the input array: \n  ' + duplicated.join('\n  '));
+      }
+    })
+    .then(loadBlogs)
+    .then(() => {
+      const errors = [];
+      docs.forEach(doc => {
+        try {
+          validate(doc);
+        } catch (error) {
+          errors.push(error);
+        }
+      });
+      if (errors.length > 0) {
+        errors.forEach(error => console.log(String(error)));
+        throw errors[0];
+      }
 
-  const errors = [];
-  docs.forEach(doc => {
-    try {
-      validate(doc);
-    } catch (error) {
-      errors.push(error);
-    }
-  });
-  if (errors.length > 0) {
-    errors.forEach(error => console.log(String(error)));
-    throw errors[0];
-  }
-
-  docs.forEach(_save);
+      docs.forEach(_save);
+    });
 }
 
 module.exports = {
