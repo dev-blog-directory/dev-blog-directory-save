@@ -114,6 +114,40 @@ describe('dev-blog-directory-save', () => {
       }];
       expect(() => saveAll(docs)).to.be.throw('Duplicated url');
     });
+
+    it('print multi error messages', () => {
+      const docs = [{
+        url: 'https://myblog.com/saveAll/1',
+        name: 'myblog'
+      }, {
+        url: 'https://myblog.com/saveAll/3',
+        name: 'myblog'
+      }, {
+        url: 'myblog.com/saveAll/4',
+        name: 'myblog'
+      }];
+      expect(() => saveAll(docs)).to.be.throw('Duplicated url');
+    });
+
+    it('Duplicated urls in the input array', () => {
+      const docs = [{
+        url: 'https://myblog.com/saveAll/1',
+        name: 'myblog'
+      }, {
+        url: 'https://myblog.com/saveAll/2',
+        name: 'myblog'
+      }, {
+        url: 'https://myblog.com/saveAll/3',
+        name: 'myblog'
+      }, {
+        url: 'https://myblog.com/saveAll/1',
+        name: 'myblog'
+      }, {
+        url: 'https://myblog.com/saveAll/3',
+        name: 'myblog'
+      }];
+      expect(() => saveAll(docs)).to.be.throw('Duplicated urls in the input array');
+    });
   });
 
   describe('validate', () => {
@@ -481,17 +515,18 @@ describe('dev-blog-directory-save', () => {
   });
 
   describe('checkDuplicated', () => {
-    it('should not throw error', () => {
+    it('should return an empty array', () => {
       const blogs = [
         {
           name: 'a',
           url: 'https://blog.com/a'
         }
       ];
-      expect(() => checkDuplicated(blogs)).to.not.throw();
+      const result = checkDuplicated(blogs);
+      expect(result).to.be.an('array').have.lengthOf(0);
     });
 
-    it('should not throw error', () => {
+    it('should return an empty array', () => {
       const blogs = [
         {
           name: 'a',
@@ -506,10 +541,11 @@ describe('dev-blog-directory-save', () => {
           url: 'https://blog.com/c'
         }
       ];
-      expect(() => checkDuplicated(blogs)).to.not.throw();
+      const result = checkDuplicated(blogs);
+      expect(result).to.be.an('array').have.lengthOf(0);
     });
 
-    it('should throw error', () => {
+    it('should return duplicated result', () => {
       const blogs = [
         {
           name: 'a',
@@ -528,7 +564,37 @@ describe('dev-blog-directory-save', () => {
           url: 'https://blog.com/b'
         }
       ];
-      expect(() => checkDuplicated(blogs)).to.throw();
+      const result = checkDuplicated(blogs);
+      expect(result).to.be.an('array').have.lengthOf(1);
+      expect(result[0]).eql('https://blog.com/b');
+    });
+
+    it('should return duplicated result', () => {
+      const blogs = [
+        {
+          name: 'a',
+          url: 'https://blog.com/a'
+        },
+        {
+          name: 'b',
+          url: 'https://blog.com/b'
+        },
+        {
+          name: 'c',
+          url: 'https://blog.com/c'
+        },
+        {
+          name: 'b2',
+          url: 'https://blog.com/b'
+        },
+        {
+          name: 'c2',
+          url: 'https://blog.com/c'
+        }
+      ];
+      const result = checkDuplicated(blogs);
+      expect(result).to.be.an('array').have.lengthOf(2);
+      expect(result[0]).eql('https://blog.com/c');
     });
   });
 });
