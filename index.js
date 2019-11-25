@@ -36,16 +36,18 @@ function findUrlInDocuments(url) {
 }
 
 function checkDuplicated(blogs) {
+  const duplicated = [];
   for (let i = blogs.length - 1; i >= 0; i--) {
     const current = blogs[i];
     for (let j = 0; j < i; j++) {
       const compare = blogs[j];
       if (current.url === compare.url) {
-        // TODO: return duplicated url and index, instead of throwing an error.
-        throw new Error('Duplicated url: ' + current.url);
+        duplicated.push(current.url);
       }
     }
   }
+
+  return duplicated;
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -212,7 +214,11 @@ function saveAll(docs) {
     throw new TypeError('Invalid arguments. Expect an array.');
   }
 
-  checkDuplicated(docs);
+  const duplicated = checkDuplicated(docs);
+  if (duplicated && duplicated.length > 1) {
+    throw new Error('Duplicated urls in the input array: \n  ' + duplicated.join('\n  '));
+  }
+
   const errors = [];
   docs.forEach(doc => {
     try {
