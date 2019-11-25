@@ -1,12 +1,12 @@
 {
   "name": "dev-blog-directory-save",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "API for save new blogs to dev-blog-directory.",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "lint": "xo",
     "lint:fix": "xo --fix",
-    "test": "mocha test.js",
+    "test": "mocha test/index.js",
     "test:cov": "nyc npm run test",
     "test:loop": "while npm test --silent; do :; done"
   },
@@ -34,7 +34,7 @@
     "cli"
   ],
   "files": [
-    "index.js",
+    "lib/",
     "LICENSE",
     "README.md"
   ],
@@ -58,7 +58,7 @@
     },
     "overrides": [
       {
-        "files": "test.js",
+        "files": "test/*.js",
         "envs": [
           "node",
           "mocha"
