@@ -13,6 +13,7 @@ const checkDuplicated = myModule.__get__('checkDuplicated');
 const validateUrl = myModule.__get__('validateUrl');
 const validate = myModule.__get__('validate');
 const loadBlogs = myModule.__get__('loadBlogs');
+const urlAlias = myModule.__get__('urlAlias');
 
 describe('dev-blog-directory-save', () => {
   before(() => {
@@ -543,6 +544,22 @@ describe('dev-blog-directory-save', () => {
       expect(findUrlInDocuments('https://myblog.com/')).to.be.eql(true);
     });
 
+    it('should found', () => {
+      expect(findUrlInDocuments('https://www.myblog.com/')).to.be.eql(true);
+    });
+
+    it('should found', () => {
+      expect(findUrlInDocuments('http://www.myblog.com/')).to.be.eql(true);
+    });
+
+    it('should found', () => {
+      expect(findUrlInDocuments('https://www.myblog.com')).to.be.eql(true);
+    });
+
+    it('should found', () => {
+      expect(findUrlInDocuments('https://www.myblog.com/?foo=bar')).to.be.eql(true);
+    });
+
     it('should not found', () => {
       expect(findUrlInDocuments('https://myblog.com/findUrlInDocuments/2')).to.be.eql(false);
     });
@@ -629,6 +646,44 @@ describe('dev-blog-directory-save', () => {
       const result = checkDuplicated(blogs);
       expect(result).to.be.an('array').have.lengthOf(2);
       expect(result[0]).eql('https://blog.com/c');
+    });
+  });
+
+  describe('urlAlias', () => {
+    it('only hostname 1', () => {
+      const url = 'https://example.com/';
+      const result = urlAlias(url);
+      expect(result).to.be.eql('example.com');
+    });
+
+    it('only hostname 2', () => {
+      const url = 'https://example.com/?utm=xxx';
+      const result = urlAlias(url);
+      expect(result).to.be.eql('example.com');
+    });
+
+    it('only hostname 2', () => {
+      const url = 'https://example.com/#utm=xxx';
+      const result = urlAlias(url);
+      expect(result).to.be.eql('example.com');
+    });
+
+    it('only hostname 3', () => {
+      const url = 'http://www.example.com/#utm=xxx';
+      const result = urlAlias(url);
+      expect(result).to.be.eql('example.com');
+    });
+
+    it('homename and pathname 1', () => {
+      const url = 'https://example.com/user1/';
+      const result = urlAlias(url);
+      expect(result).to.be.eql('example.com/user1');
+    });
+
+    it('homename and pathname 2', () => {
+      const url = 'https://example.com/user1/?utm=xxx';
+      const result = urlAlias(url);
+      expect(result).to.be.eql('example.com/user1');
     });
   });
 });
