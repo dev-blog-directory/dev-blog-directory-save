@@ -17,11 +17,15 @@ npm install dev-blog-directory-save
 
 ## API
 
-### save (doc)
+### save (doc [, options])
 
 Save a blog entry to documents.
 
-### saveAll  (docArray)
+**options**
+- `merge` _(default: false)_ - merge blogs
+
+
+### saveAll  (docArray [, options])
 
 Save a list of blog entries to documents.
 

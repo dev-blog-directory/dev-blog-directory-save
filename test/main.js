@@ -71,6 +71,14 @@ describe('dev-blog-directory-save', () => {
       };
       return expect(save(doc)).to.be.rejectedWith('Duplicated url');
     });
+
+    it('merge a doc', () => {
+      const doc = {
+        url: 'https://myblog.com/',
+        name: 'myblog-new'
+      };
+      return expect(save(doc, {merge: true})).to.be.fulfilled;
+    });
   });
 
   describe('saveAll', () => {
@@ -151,6 +159,20 @@ describe('dev-blog-directory-save', () => {
         name: 'myblog'
       }];
       return expect(saveAll(docs)).to.be.rejectedWith('Duplicated urls in the input array');
+    });
+
+    it('merge docs', () => {
+      const docs = [{
+        url: 'https://myblog.com/saveAll/1',
+        name: 'myblog'
+      }, {
+        url: 'https://myblog.com/saveAll/2',
+        name: 'myblog'
+      }, {
+        url: 'https://myblog.com/saveAll/99',
+        name: 'myblog'
+      }];
+      return expect(saveAll(docs, {merge: true})).to.be.fulfilled;
     });
   });
 
