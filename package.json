@@ -1,6 +1,6 @@
 {
   "name": "dev-blog-directory-save",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "API for save new blogs to dev-blog-directory.",
   "main": "lib/index.js",
   "scripts": {

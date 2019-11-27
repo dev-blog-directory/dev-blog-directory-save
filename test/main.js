@@ -142,7 +142,7 @@ describe('dev-blog-directory-save', () => {
       return expect(saveAll(docs)).to.be.rejectedWith('Duplicated url');
     });
 
-    it('Duplicated urls in the input array', () => {
+    it('Duplicated urls in the list of to saving', () => {
       const docs = [{
         url: 'https://myblog.com/saveAll/1',
         name: 'myblog'
@@ -159,7 +159,7 @@ describe('dev-blog-directory-save', () => {
         url: 'https://myblog.com/saveAll/3',
         name: 'myblog'
       }];
-      return expect(saveAll(docs)).to.be.rejectedWith('Duplicated urls in the input array');
+      return expect(saveAll(docs)).to.be.rejectedWith('Duplicated urls in the list of to saving');
     });
 
     it('merge docs', () => {
@@ -646,6 +646,30 @@ describe('dev-blog-directory-save', () => {
       const result = checkDuplicated(blogs);
       expect(result).to.be.an('array').have.lengthOf(2);
       expect(result[0]).eql('https://blog.com/c');
+    });
+
+    it('should return duplicated result', () => {
+      const blogs = [
+        {
+          name: 'a',
+          url: 'https://blog.com/a'
+        },
+        {
+          name: 'b',
+          url: 'https://blog.com/b'
+        },
+        {
+          name: 'c',
+          url: 'https://blog.com/c'
+        },
+        {
+          name: 'b2',
+          url: 'http://www.blog.com/b/'
+        }
+      ];
+      const result = checkDuplicated(blogs);
+      expect(result).to.be.an('array').have.lengthOf(1);
+      expect(result[0]).eql('http://www.blog.com/b/');
     });
   });
 
