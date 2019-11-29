@@ -225,12 +225,12 @@ describe('dev-blog-directory-save', () => {
       expect(() => validate(doc)).to.be.throw('Duplicated url');
     });
 
-    it('invalid rss url', () => {
+    it('invalid feed url', () => {
       const doc = {
         url: 'https://example.com',
-        rss: 'example.com'
+        feed: 'example.com'
       };
-      expect(() => validate(doc)).to.be.throw('invalid rss url');
+      expect(() => validate(doc)).to.be.throw('invalid feed url');
     });
 
     it('invalid github url', () => {
