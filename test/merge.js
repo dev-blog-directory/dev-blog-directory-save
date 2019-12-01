@@ -43,6 +43,62 @@ describe('merge', () => {
       expect(newDoc.rss).to.be.eql('https://myblog.com/feed/');
     });
 
+    it('merge url - no overwrite', () => {
+      const obj1 = {
+        _id: '123456',
+        url: 'https://myblog.com',
+        name: 'myblog',
+        author: null,
+        rss: 'http://myblog.com/wrong-feed/',
+        tags: ['foo', 'bar'],
+        categories: ['foo', 'bar']
+      };
+
+      const obj2 = {
+        url: 'http://myblog.com',
+        name: null,
+        author: 'blogger',
+        rss: 'https://myblog.com/feed/',
+        tags: ['foo', 'bar'],
+        categories: ['foo', 'bar']
+      };
+
+      const newDoc = mergeObject(obj1, obj2);
+      expect(newDoc._id).to.be.an('string').to.be.have.lengthOf(6);
+      expect(newDoc.url).to.be.eql('https://myblog.com');
+      expect(newDoc.name).to.be.eql('myblog');
+      expect(newDoc.author).to.be.eql('blogger');
+      expect(newDoc.rss).to.be.eql('https://myblog.com/feed/');
+    });
+
+    it('merge url - overwite', () => {
+      const obj1 = {
+        _id: '123456',
+        url: 'http://myblog.com',
+        name: 'myblog',
+        author: null,
+        rss: 'http://myblog.com/wrong-feed/',
+        tags: ['foo', 'bar'],
+        categories: ['foo', 'bar']
+      };
+
+      const obj2 = {
+        url: 'https://myblog.com',
+        name: null,
+        author: 'blogger',
+        rss: 'https://myblog.com/feed/',
+        tags: ['foo', 'bar'],
+        categories: ['foo', 'bar']
+      };
+
+      const newDoc = mergeObject(obj1, obj2);
+      expect(newDoc._id).to.be.an('string').to.be.have.lengthOf(6);
+      expect(newDoc.url).to.be.eql('https://myblog.com');
+      expect(newDoc.name).to.be.eql('myblog');
+      expect(newDoc.author).to.be.eql('blogger');
+      expect(newDoc.rss).to.be.eql('https://myblog.com/feed/');
+    });
+
     it('merge array 1', () => {
       const obj1 = {
         _id: '123456',
@@ -145,6 +201,18 @@ describe('merge', () => {
         author: null,
         tags: ['foo', 'ios'],
         categories: null
+      };
+
+      return expect(_merge(doc)).to.be.fulfilled;
+    });
+
+    it('merge url', () => {
+      const doc = {
+        url: 'http://myblog.com/',
+        name: 'myblog',
+        author: 'blogger',
+        tags: ['foo', 'bar'],
+        categories: ['foo', 'bar']
       };
 
       return expect(_merge(doc)).to.be.fulfilled;
