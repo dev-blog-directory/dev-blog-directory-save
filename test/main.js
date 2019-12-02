@@ -292,7 +292,7 @@ describe('dev-blog-directory-save', () => {
           url: 'https://example.com/'
         };
         expect(validate(doc)).to.be.eql(true);
-        expect(doc.langs).to.be.an('undefined');
+        expect(doc.langs).to.be.eql(['en']);
       });
 
       it('should be \'\'', () => {
@@ -301,7 +301,7 @@ describe('dev-blog-directory-save', () => {
           langs: ''
         };
         expect(validate(doc)).to.be.eql(true);
-        expect(doc.langs).to.be.eql('');
+        expect(doc.langs).to.be.eql(['en']);
       });
 
       it('should be an array', () => {
