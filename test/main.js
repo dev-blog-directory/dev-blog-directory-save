@@ -454,7 +454,9 @@ describe('dev-blog-directory-save', () => {
         'foo-foo',
         'FOO-Bar',
         'foo,bar',
-        ['foo-bar', 'A-TAG']
+        ['foo-bar', 'A-TAG'],
+        'c++',
+        ['c++', 'c/c++', 'c#', '.net']
       ];
 
       validTags.forEach((tags, i) => {
