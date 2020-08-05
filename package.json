@@ -12,7 +12,7 @@
     "preinstall": "unlink-self 2>&1 | echo unlink-self"
   },
   "dependencies": {
-    "fs-extra": "^8.1.0",
+    "fs-extra": "^9.0.1",
     "id-generators": "^1.0.3",
     "iso-639-1": "^2.1.0",
     "locale-code": "^2.0.2",
