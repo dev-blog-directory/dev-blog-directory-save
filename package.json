@@ -30,7 +30,7 @@
     "nyc": "^15.1.0",
     "rewire": "^5.0.0",
     "unlink-self": "latest",
-    "xo": "^0.25.3"
+    "xo": "^0.32.1"
   },
   "keywords": [
     "save",
