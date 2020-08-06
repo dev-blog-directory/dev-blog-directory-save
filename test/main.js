@@ -3,11 +3,11 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
-const {expect} = chai;
+const { expect } = chai;
 const fs = require('fs-extra');
 const rewire = require('rewire');
 const myModule = rewire('dev-blog-directory-save');
-const {save, saveAll} = require('dev-blog-directory-save');
+const { save, saveAll } = require('dev-blog-directory-save');
 const findUrlInDocuments = myModule.__get__('findUrlInDocuments');
 const checkDuplicated = myModule.__get__('checkDuplicated');
 const validateUrl = myModule.__get__('validateUrl');
@@ -17,11 +17,12 @@ const urlAlias = myModule.__get__('urlAlias');
 
 describe('dev-blog-directory-save', () => {
   before(() => {
-    return fs.remove('./documents')
+    return fs
+      .remove('./documents')
       .then(() => {
         console.log('remove ./documents success!');
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   });
@@ -37,7 +38,9 @@ describe('dev-blog-directory-save', () => {
     });
 
     it('invalid type', () => {
-      return expect(save('{object:1}')).to.be.rejectedWith('invalid doc object');
+      return expect(save('{object:1}')).to.be.rejectedWith(
+        'invalid doc object'
+      );
     });
 
     it('no url', () => {
@@ -78,7 +81,7 @@ describe('dev-blog-directory-save', () => {
         url: 'https://myblog.com/',
         name: 'myblog-new'
       };
-      return expect(save(doc, {merge: true})).to.be.fulfilled;
+      return expect(save(doc, { merge: true })).to.be.fulfilled;
     });
   });
 
@@ -92,88 +95,114 @@ describe('dev-blog-directory-save', () => {
     });
 
     it('no url', () => {
-      const docs = [{
-        name: 'example'
-      }];
+      const docs = [
+        {
+          name: 'example'
+        }
+      ];
       return expect(saveAll(docs)).to.be.rejectedWith('url is required');
     });
 
     it('should save a doc', () => {
-      const docs = [{
-        url: 'https://myblog.com/saveAll/1',
-        name: 'myblog'
-      }, {
-        url: 'https://myblog.com/saveAll/2',
-        name: 'myblog'
-      }];
+      const docs = [
+        {
+          url: 'https://myblog.com/saveAll/1',
+          name: 'myblog'
+        },
+        {
+          url: 'https://myblog.com/saveAll/2',
+          name: 'myblog'
+        }
+      ];
       return expect(saveAll(docs)).to.be.fulfilled;
     });
 
     it('should save another doc', () => {
-      const docs = [{
-        url: 'https://myblog.com/saveAll/3',
-        name: 'myblog'
-      }, {
-        url: 'https://myblog.com/saveAll/4',
-        name: 'myblog'
-      }];
+      const docs = [
+        {
+          url: 'https://myblog.com/saveAll/3',
+          name: 'myblog'
+        },
+        {
+          url: 'https://myblog.com/saveAll/4',
+          name: 'myblog'
+        }
+      ];
       return expect(saveAll(docs)).to.be.fulfilled;
     });
 
     it('duplicated url', () => {
-      const docs = [{
-        url: 'https://myblog.com/saveAll/1',
-        name: 'myblog'
-      }];
+      const docs = [
+        {
+          url: 'https://myblog.com/saveAll/1',
+          name: 'myblog'
+        }
+      ];
       return expect(saveAll(docs)).to.be.rejectedWith('Duplicated url');
     });
 
     it('print multi error messages', () => {
-      const docs = [{
-        url: 'https://myblog.com/saveAll/1',
-        name: 'myblog'
-      }, {
-        url: 'https://myblog.com/saveAll/3',
-        name: 'myblog'
-      }, {
-        url: 'myblog.com/saveAll/4',
-        name: 'myblog'
-      }];
+      const docs = [
+        {
+          url: 'https://myblog.com/saveAll/1',
+          name: 'myblog'
+        },
+        {
+          url: 'https://myblog.com/saveAll/3',
+          name: 'myblog'
+        },
+        {
+          url: 'myblog.com/saveAll/4',
+          name: 'myblog'
+        }
+      ];
       return expect(saveAll(docs)).to.be.rejectedWith('Duplicated url');
     });
 
     it('Duplicated urls in the list of to saving', () => {
-      const docs = [{
-        url: 'https://myblog.com/saveAll/1',
-        name: 'myblog'
-      }, {
-        url: 'https://myblog.com/saveAll/2',
-        name: 'myblog'
-      }, {
-        url: 'https://myblog.com/saveAll/3',
-        name: 'myblog'
-      }, {
-        url: 'https://myblog.com/saveAll/1',
-        name: 'myblog'
-      }, {
-        url: 'https://myblog.com/saveAll/3',
-        name: 'myblog'
-      }];
-      return expect(saveAll(docs)).to.be.rejectedWith('Duplicated urls in the list of to saving');
+      const docs = [
+        {
+          url: 'https://myblog.com/saveAll/1',
+          name: 'myblog'
+        },
+        {
+          url: 'https://myblog.com/saveAll/2',
+          name: 'myblog'
+        },
+        {
+          url: 'https://myblog.com/saveAll/3',
+          name: 'myblog'
+        },
+        {
+          url: 'https://myblog.com/saveAll/1',
+          name: 'myblog'
+        },
+        {
+          url: 'https://myblog.com/saveAll/3',
+          name: 'myblog'
+        }
+      ];
+      return expect(saveAll(docs)).to.be.rejectedWith(
+        'Duplicated urls in the list of to saving'
+      );
     });
 
     it('merge docs', () => {
-      const docs = [{
-        url: 'https://myblog.com/saveAll/1',
-        name: 'myblog'
-      }, {
-        url: 'https://myblog.com/saveAll/2',
-        name: 'myblog'
-      }, {
-        url: 'https://myblog.com/saveAll/99',
-        name: 'myblog'
-      }];
-      return expect(saveAll(docs, {merge: true})).to.be.fulfilled;
+      const docs = [
+        {
+          url: 'https://myblog.com/saveAll/1',
+          name: 'myblog'
+        },
+        {
+          url: 'https://myblog.com/saveAll/2',
+          name: 'myblog'
+        },
+        {
+          url: 'https://myblog.com/saveAll/99',
+          name: 'myblog'
+        }
+      ];
+      return expect(saveAll(docs, { merge: true })).to.be.fulfilled;
     });
   });
 
@@ -283,7 +312,9 @@ describe('dev-blog-directory-save', () => {
       };
       expect(() => validate(doc)).to.not.throw();
       expect(validate(doc)).to.be.eql(true);
-      expect(doc.url).to.be.eql('http://foo.bar/?q=Spaces%20should%20be%20encoded');
+      expect(doc.url).to.be.eql(
+        'http://foo.bar/?q=Spaces%20should%20be%20encoded'
+      );
     });
 
     describe('validate - langs', () => {
@@ -295,7 +326,7 @@ describe('dev-blog-directory-save', () => {
         expect(doc.langs).to.be.eql(['en']);
       });
 
-      it('should be \'\'', () => {
+      it("should be ''", () => {
         const doc = {
           url: 'https://example.com/',
           langs: ''
@@ -371,7 +402,7 @@ describe('dev-blog-directory-save', () => {
         expect(doc.categories).to.be.an('undefined');
       });
 
-      it('should be \'\'', () => {
+      it("should be ''", () => {
         const doc = {
           url: 'https://example.com/',
           tags: '',
@@ -470,12 +501,7 @@ describe('dev-blog-directory-save', () => {
         });
       });
 
-      const invalidTags = [
-        '-foo',
-        'foo-',
-        'foo_bar',
-        ['@123foo']
-      ];
+      const invalidTags = ['-foo', 'foo-', 'foo_bar', ['@123foo']];
 
       invalidTags.forEach((tags, i) => {
         it(`invalid tags (${i})`, () => {
@@ -505,7 +531,7 @@ describe('dev-blog-directory-save', () => {
     });
 
     it('non-string type', () => {
-      expect(validateUrl({object: 1})).to.be.eql(false);
+      expect(validateUrl({ object: 1 })).to.be.eql(false);
     });
 
     it('invalid url', () => {
@@ -533,7 +559,9 @@ describe('dev-blog-directory-save', () => {
     });
 
     it('spaces should be encoded', () => {
-      expect(validateUrl('http://foo.bar?q=Spaces should be encoded')).to.be.eql(false);
+      expect(
+        validateUrl('http://foo.bar?q=Spaces should be encoded')
+      ).to.be.eql(false);
     });
   });
 
@@ -559,11 +587,15 @@ describe('dev-blog-directory-save', () => {
     });
 
     it('should found', () => {
-      expect(findUrlInDocuments('https://www.myblog.com/?foo=bar')).to.be.eql(true);
+      expect(findUrlInDocuments('https://www.myblog.com/?foo=bar')).to.be.eql(
+        true
+      );
     });
 
     it('should not found', () => {
-      expect(findUrlInDocuments('https://myblog.com/findUrlInDocuments/2')).to.be.eql(false);
+      expect(
+        findUrlInDocuments('https://myblog.com/findUrlInDocuments/2')
+      ).to.be.eql(false);
     });
   });
 
