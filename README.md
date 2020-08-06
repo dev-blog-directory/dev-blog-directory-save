@@ -3,9 +3,7 @@
 [![NPM Version][npm-version-image]][npm-url]
 [![LICENSE][license-image]][license-url]
 [![Build Status][travis-image]][travis-url]
-[![Coverage Status][coveralls-image]][coveralls-url]
-[![dependencies Status][dependencies-image]][dependencies-url]
-[![devDependencies Status][devDependencies-image]][devDependencies-url]
+[![code style: prettier][code-style-prettier-image]][code-style-prettier-url]
 
 API for save new blogs to **[dev-blog-directory-raw](https://github.com/dailyrandomphoto/dev-blog-directory-raw)**.
 
@@ -22,13 +20,12 @@ npm install dev-blog-directory-save
 Save a blog entry to documents.
 
 **options**
+
 - `merge` _(default: false)_ - merge blogs
 
-
-### saveAll  (docArray [, options])
+### saveAll (docArray [, options])
 
 Save a list of blog entries to documents.
-
 
 ## Related
 
@@ -38,20 +35,16 @@ Save a list of blog entries to documents.
 - [dev-blog-directory-save-json-cli](https://github.com/dailyrandomphoto/dev-blog-directory-save-json-cli) - A CLI for saves the JSON format blog list to `documents/*.yml`.
 
 ## License
+
 Copyright (c) 2019 [dailyrandomphoto][my-url]. Licensed under the [MIT license][license-url].
 
 [my-url]: https://github.com/dailyrandomphoto
 [npm-url]: https://www.npmjs.com/package/dev-blog-directory-save
 [travis-url]: https://travis-ci.org/dailyrandomphoto/dev-blog-directory-save
-[coveralls-url]: https://coveralls.io/github/dailyrandomphoto/dev-blog-directory-save?branch=master
 [license-url]: LICENSE
-[dependencies-url]: https://david-dm.org/dailyrandomphoto/dev-blog-directory-save
-[devDependencies-url]: https://david-dm.org/dailyrandomphoto/dev-blog-directory-save?type=dev
-
+[code-style-prettier-url]: https://github.com/prettier/prettier
 [npm-downloads-image]: https://img.shields.io/npm/dm/dev-blog-directory-save
 [npm-version-image]: https://img.shields.io/npm/v/dev-blog-directory-save
 [license-image]: https://img.shields.io/npm/l/dev-blog-directory-save
 [travis-image]: https://img.shields.io/travis/dailyrandomphoto/dev-blog-directory-save
-[coveralls-image]: https://img.shields.io/coveralls/github/dailyrandomphoto/dev-blog-directory-save
-[dependencies-image]: https://img.shields.io/david/dailyrandomphoto/dev-blog-directory-save
-[devDependencies-image]: https://img.shields.io/david/dev/dailyrandomphoto/dev-blog-directory-save
+[code-style-prettier-image]: https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square

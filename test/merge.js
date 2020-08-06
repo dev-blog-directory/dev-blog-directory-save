@@ -3,7 +3,7 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
-const {expect} = chai;
+const { expect } = chai;
 const rewire = require('rewire');
 const myModule = rewire('dev-blog-directory-save');
 const loadBlogs = myModule.__get__('loadBlogs');
